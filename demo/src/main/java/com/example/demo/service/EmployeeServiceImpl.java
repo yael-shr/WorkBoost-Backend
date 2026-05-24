@@ -8,12 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service // האנוטציה עוברת לפה, כי זה הרכיב האמיתי שרץ בזיכרון
+@Service 
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    // הזרקת ה-Repository כרגיל דרך הבנאי
     public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
@@ -29,6 +28,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setEmail(registerDTO.getEmail());
         employee.setPassword(registerDTO.getPassword());
         employee.setPoints(0);
+        employee.setCompletedTasksCount(0);
 
         Employee savedEmployee = employeeRepository.save(employee);
         return convertToDTO(savedEmployee);
@@ -48,6 +48,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         dto.setName(employee.getName());
         dto.setEmail(employee.getEmail());
         dto.setPoints(employee.getPoints());
+        dto.setCompletedTasksCount(employee.getCompletedTasksCount());
         return dto;
     }
 }
