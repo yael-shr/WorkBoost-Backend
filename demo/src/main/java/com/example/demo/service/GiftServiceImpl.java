@@ -4,11 +4,14 @@ import com.example.demo.dto.GiftDTO;
 import com.example.demo.dto.BuyGiftRequestDTO;
 import com.example.demo.model.Employee;
 import com.example.demo.model.Gift;
+import com.example.demo.model.PurchaseHistory;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.repository.GiftRepository;
+import com.example.demo.repository.PurchaseHistoryRepository; 
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,10 +20,12 @@ public class GiftServiceImpl implements GiftService {
 
     private final GiftRepository giftRepository;
     private final EmployeeRepository employeeRepository;
+    private final PurchaseHistoryRepository purchaseHistoryRepository;
 
-    public GiftServiceImpl(GiftRepository giftRepository, EmployeeRepository employeeRepository) {
+    public GiftServiceImpl(GiftRepository giftRepository, EmployeeRepository employeeRepository, PurchaseHistoryRepository purchaseHistoryRepository) {
         this.giftRepository = giftRepository;
         this.employeeRepository = employeeRepository;
+        this.purchaseHistoryRepository = purchaseHistoryRepository; 
     }
 
     @Override
@@ -65,6 +70,13 @@ public class GiftServiceImpl implements GiftService {
 
         employeeRepository.save(employee);
         giftRepository.save(gift);
+
+        PurchaseHistory purchase = new PurchaseHistory();
+        purchase.setEmployee(employee);
+        purchase.setGift(gift);
+        purchase.setPurchaseDate(LocalDateTime.now()); 
+
+        purchaseHistoryRepository.save(purchase);
     }
 
     private GiftDTO convertToDTO(Gift gift) {
