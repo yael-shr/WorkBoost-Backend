@@ -3,6 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.dto.EmployeeRegisterDTO;
 import com.example.demo.service.EmployeeService;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,5 +33,27 @@ public class EmployeeController {
     @GetMapping
     public List<EmployeeDTO> getAll() {
         return employeeService.getAllEmployees();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            EmployeeDTO employeeDTO = employeeService.loginEmployee(loginRequest.getEmail(), loginRequest.getPassword());
+            
+            return ResponseEntity.ok(employeeDTO);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+    }
+    
+    public static class LoginRequest {
+        private String email;
+        private String password;
+    
+        // גטרים וסטרים (Getters & Setters)
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
+        public String getPassword() { return password; }
+        public void setPassword(String password) { this.password = password; }
     }
 }

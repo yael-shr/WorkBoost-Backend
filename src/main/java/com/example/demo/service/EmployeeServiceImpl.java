@@ -42,6 +42,18 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public EmployeeDTO loginEmployee(String email, String password) {
+        Employee employee = employeeRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Error: Invalid email or password"));
+
+        if (!employee.getPassword().equals(password)) {
+            throw new RuntimeException("Error: Invalid email or password");
+        }
+
+        return convertToDTO(employee);
+    }
+
     private EmployeeDTO convertToDTO(Employee employee) {
         EmployeeDTO dto = new EmployeeDTO();
         dto.setId(employee.getId());

@@ -6,9 +6,7 @@ import java.util.List;
 
 public interface EmployeeService {
     
-    // הגדרת החוזה: כל מי שיממש את השירות הזה חייב לדעת לרשום עובד
     EmployeeDTO registerEmployee(EmployeeRegisterDTO registerDTO);
-    
-    // הגדרת החוזה: חייב לדעת להחזיר את כל העובדים
+    EmployeeDTO loginEmployee(String email, String password);
     List<EmployeeDTO> getAllEmployees();
 }
