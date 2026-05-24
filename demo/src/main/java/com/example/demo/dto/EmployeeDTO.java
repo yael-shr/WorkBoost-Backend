@@ -12,4 +12,5 @@ public class EmployeeDTO {
     private String name;
     private String email;
     private int points;
+    private int completedTasksCount;
 }

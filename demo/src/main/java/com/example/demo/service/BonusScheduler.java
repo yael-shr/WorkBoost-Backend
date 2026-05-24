@@ -12,7 +12,6 @@ public class BonusScheduler {
 
     private final EmployeeRepository employeeRepository;
 
-    // הזרקת ה-Repository כדי שנוכל לעדכן את העובדים בבסיס הנתונים
     public BonusScheduler(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
@@ -31,5 +30,40 @@ public class BonusScheduler {
         employeeRepository.saveAll(employees);
 
         System.out.println("LOG: Successfully updated " + employees.size() + " employees with 10 bonus points.");
+    }
+
+@Scheduled(fixedRate = 60000)
+    public void rewardTopEmployeesAutomated() {
+        System.out.println("LOG: Automated scheduler started - Searching for the top 2 employees...");
+
+        // 1. שליפת שני העובדים המובילים כרגע
+        List<Employee> topEmployees = employeeRepository.findTop2ByOrderByCompletedTasksCountDesc();
+
+        // 2. שליפת כל העובדים במערכת (כך שאנחנו עובדים על אותם אובייקטים בדיוק בזיכרון)
+        List<Employee> allEmployees = employeeRepository.findAll();
+
+        // 3. לוגיקת חלוקת הבונוס בזיכרון בלבד
+        for (Employee topEmployee : topEmployees) {
+            if (topEmployee.getCompletedTasksCount() > 0) {
+                System.out.println("LOG: Top employee found! " + topEmployee.getName() + " with " + topEmployee.getCompletedTasksCount() + " tasks.");
+                
+                // מוצאים את העובד האמיתי מתוך הרשימה המלאה כדי לעדכן אותו
+                for (Employee emp : allEmployees) {
+                    if (emp.getId().equals(topEmployee.getId())) {
+                        emp.setPoints(emp.getPoints() + 50); // הוספת הבונוס
+                        System.out.println("LOG: Prepared 50 bonus points for " + emp.getName());
+                    }
+                }
+            }
+        }
+
+        // 4. עכשיו מאפסים את המונים לכולם בזיכרון
+        for (Employee emp : allEmployees) {
+            emp.setCompletedTasksCount(0);
+        }
+
+        // 5. שמירה אחת ויחידה ל-SQL Server שמבצעת את כל העדכונים במכה אחת!
+        employeeRepository.saveAll(allEmployees);
+        System.out.println("LOG: SQL Server updated successfully - Bonuses given and counters reset.");
     }
 }

@@ -25,4 +25,7 @@ public class Employee {
     private String password;
 
     private int points = 0; 
+    
+    @Column(name = "completed_tasks_count", nullable = false, columnDefinition = "int default 0")
+    private int completedTasksCount = 0;
 }
