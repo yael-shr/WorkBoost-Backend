@@ -35,7 +35,6 @@ public class GiftServiceImpl implements GiftService {
         gift.setDescription(giftDTO.getDescription());
         gift.setPriceInPoints(giftDTO.getPriceInPoints());
         gift.setStock(giftDTO.getStock());
-
         Gift savedGift = giftRepository.save(gift);
         return convertToDTO(savedGift);
     }
@@ -68,8 +67,6 @@ public class GiftServiceImpl implements GiftService {
         employee.setPoints(employee.getPoints() - gift.getPriceInPoints());
         gift.setStock(gift.getStock() - 1);
 
-        employeeRepository.save(employee);
-        giftRepository.save(gift);
 
         PurchaseHistory purchase = new PurchaseHistory();
         purchase.setEmployee(employee);

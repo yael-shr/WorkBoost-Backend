@@ -9,4 +9,5 @@ public interface EmployeeService {
     EmployeeDTO registerEmployee(EmployeeRegisterDTO registerDTO);
     EmployeeDTO loginEmployee(String email, String password);
     List<EmployeeDTO> getAllEmployees();
+    EmployeeDTO getEmployeeByEmail(String email);
 }

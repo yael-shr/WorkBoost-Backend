@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/employees")
-@CrossOrigin(origins = "*") // מאפשר בהמשך לצד הלקוח להתחבר לשרת ללא חסימות דפדפן
+@CrossOrigin(origins = "http://localhost:5173") // מאפשר לריאקט לגשת ל-API ללא חסימות דפדפן
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -34,6 +34,19 @@ public class EmployeeController {
     public List<EmployeeDTO> getAll() {
         return employeeService.getAllEmployees();
     }
+
+    @GetMapping("/by-email/{email}")
+    public ResponseEntity<?> getEmployeeByEmail(@PathVariable String email) {
+        try {
+            // שליפת ה-EmployeeDTO המעודכן ביותר מהמסד לפי האימייל
+            EmployeeDTO employeeDTO = employeeService.getEmployeeByEmail(email);
+            
+            return ResponseEntity.ok(employeeDTO);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
