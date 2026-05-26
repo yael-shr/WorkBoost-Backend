@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GiftRepository extends JpaRepository<Gift, Long> {
-    // כאן כרגע מספיקות לנו פונקציות ה-CRUD הבסיסיות שמתקבלות מהירושה
 }

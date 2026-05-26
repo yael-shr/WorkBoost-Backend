@@ -17,7 +17,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-   @Override // הפיכה למימוש רשמי של הממשק
+   @Override 
 public EmployeeDTO getEmployeeByEmail(String email) {
     Employee employee = employeeRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Error: Employee not found with email: " + email));
